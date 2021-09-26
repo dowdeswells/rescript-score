@@ -4,23 +4,23 @@ let recordAScore = () => {
 }
 
 let teamScoresContent = (i, score) => {
-    <div key={Belt.Int.toString(i)}>{
+    <span key={Belt.Int.toString(i)}>{
         switch score {
         | Game.NotRecorded => recordAScore()
         | Recorded (scoreValue) => 
-            <div>{
+            <span>{
                 scoreValue
                 -> Belt.Int.toString
                 -> React.string}
-            </div>
+            </span>
         }
-    }</div>
+    }</span>
 }
 
 let teamContent = (i, s) => {
 
     let (Game.TeamName(name), scores) = s
-    <div  key={Belt.Int.toString(i)}>
+    <div key={Belt.Int.toString(i)}>
         <div>{React.string(name)}</div>
         <div>
             {scores
@@ -32,9 +32,9 @@ let teamContent = (i, s) => {
 }
 
 @react.component
-let make = (~teamScores:array<Game.teamScore>) => {
+let make = (~teamScores:array<Game.teamScore>, ~currentTeam:int) => {
     <>
-        <div>{React.string("ScoresView")}</div>
+        <div>{React.string("ScoresView " ++ Belt.Int.toString(currentTeam))}</div>
         <div>
             {teamScores
             -> Belt.Array.mapWithIndex(teamContent)
