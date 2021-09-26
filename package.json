@@ -1,7 +1,7 @@
 {
-  "name": "rescript-react-realworld-example-app",
+  "name": "rescript-score",
   "version": "1.0.0",
-  "author": "Jihchi Lee <achi@987.tw>",
+  "author": "simon dowdeswell",
   "license": "MIT",
   "keywords": [
     "ReasonML",
