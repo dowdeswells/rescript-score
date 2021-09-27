@@ -24,10 +24,13 @@
   "dependencies": {
     "@rescript/react": "^0.10.3",
     "@ryyppy/rescript-promise": "^2.1.0",
+    "autoprefixer": "^10.3.6",
     "dompurify": "^2.3.1",
     "marked": "^3.0.2",
+    "postcss": "^8.3.8",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "tailwindcss": "^2.2.16"
   },
   "devDependencies": {
     "@jihchi/vite-plugin-rescript": "^1.1.2",

@@ -3,8 +3,9 @@ let make = (~onOk: array<string> => unit) => {
   let (teamNames, setTeamNames) = React.useState(() => [""])
 
   let content = (i, _) => {
-    <div key={Belt.Int.toString(i)}>
       <input
+        key={Belt.Int.toString(i)}
+        className="rounded p-3 text-blue-900 border-2 border-blue-900"
         type_="text"
         value={teamNames[i]}
         onChange={e => {
@@ -15,7 +16,7 @@ let make = (~onOk: array<string> => unit) => {
           })
         }}
       />
-    </div>
+
   }
 
   let addTeamName = event => {
@@ -30,12 +31,26 @@ let make = (~onOk: array<string> => unit) => {
     onOk(teamNames)
   }
 
-  <>
-    <div> {React.string("Configure teams first")} </div>
-    <form>
-      <button type_="button" onClick={addTeamName}> {React.string("Add Team")} </button>
-      <button type_="button" onClick={submit}> {React.string("Ok")} </button>
-      <div> {teamNames->Belt.Array.mapWithIndex(content)->React.array} </div>
+  let handleFormSubmit = (event:ReactEvent.Form.t) => {
+    event->ReactEvent.Form.preventDefault
+    event->ReactEvent.Form.stopPropagation
+    onOk(teamNames)
+  }
+
+  <div className="bg-gray-100 rounded p-2">
+    
+    <form onSubmit={handleFormSubmit}>
+      <div className="flex">
+        <h2 className="flex-grow text-lg text-blue-900 p-4"> {React.string("Configure teams")} </h2>
+        <button className="flex-none bg-blue-400 text-white p-2 rounded" type_="button" onClick={addTeamName}> {React.string("Add Team")} </button>
+      </div>
+
+      
+      <div className="grid grid-cols-1 gap-3 p-4"> {teamNames->Belt.Array.mapWithIndex(content)->React.array} </div>
+      <div className="grid justify-items-end">
+        <button className="bg-blue-400 text-white p-4 rounded" type_="button" onClick={submit}> {React.string("Ok")} </button>
+      </div>
+      
     </form>
-  </>
+  </div>
 }

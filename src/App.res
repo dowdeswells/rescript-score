@@ -1,3 +1,6 @@
+
+%%raw("import './app.css'")
+
 type gameState =
   | NoGame
   | Playing(array<Game.teamScore>, int)
@@ -8,7 +11,7 @@ type gameAction =
 
 let playGame = (teams: array<string>) => Playing(
   Belt.Array.map(teams, t => {
-    (Game.TeamName(t), list{})
+    (Game.TeamName(t), list{}, 0)
   }),
   0,
 )
@@ -20,10 +23,10 @@ let addRound = (gs, scoreValue) => {
       let nextTeam = mod(currentTeam + 1, Belt.Array.length(teamScores))
       Playing(
         Belt.Array.mapWithIndex(teamScores, (teamIndex, score) => {
-          let (Game.TeamName(name), scores) = score
+          let (Game.TeamName(name), scores, currentTotal) = score
           teamIndex == currentTeam
-            ? (Game.TeamName(name), list{Game.Recorded(scoreValue), ...scores})
-            : (Game.TeamName(name), scores)
+            ? (Game.TeamName(name), list{Game.Recorded(scoreValue), ...scores}, currentTotal + scoreValue)
+            : (Game.TeamName(name), scores, currentTotal)
         }),
         nextTeam,
       )
@@ -41,12 +44,18 @@ let reducer = (gameState, gameAction) => {
 @react.component
 let make = () => {
   let (state, dispatch) = React.useReducer(reducer, NoGame)
-  switch state {
-  | NoGame => <ConfigureTeams onOk={teamNames => dispatch(Configured(teamNames))} />
-  | Playing(teamScores, currentTeam) =>
-    <div>
-      <ScoresView teamScores={teamScores} currentTeam={currentTeam} />
-      <EnterScore onOk={newScore => dispatch(RecordScore(newScore))} />
-    </div>
+
+  <div className="bg-gray-300 p-8"> 
+  {
+    switch state {
+    | NoGame => <ConfigureTeams onOk={teamNames => dispatch(Configured(teamNames))} />
+    | Playing(teamScores, currentTeam) =>
+      <div>
+        <ScoresView teamScores={teamScores} currentTeam={currentTeam} />
+        <EnterScore onOk={newScore => dispatch(RecordScore(newScore))} />
+      </div>
+    }
   }
+  </div>
+
 }
